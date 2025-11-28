@@ -144,7 +144,7 @@ A full-stack social media platform built for the DALI Lab community at Dartmouth
 | `DELETE` | `/api/members/{id}/` | Delete a member |
 
 ### Query Parameters
-- `?search=` - Search by name, major, minor, or home
+- `?search=` - Search by name, major, minor, or hometown
 - `?ordering=name` - Order by field (name, year, created_at)
 - `?page=` - Pagination
 
