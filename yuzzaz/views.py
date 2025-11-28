@@ -1,4 +1,4 @@
-from enum import member
+# from enum import member
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import logout as auth_logout
@@ -234,7 +234,7 @@ def profile(request, user_id):
 
 
 def company_profile(request):
-    context = {        
+    context = {
     }
     return render(request, 'yuzzaz/company_profile.html', context)
 
@@ -256,8 +256,8 @@ def edit_profile(request):
         form = CustomUserForm(instance=request.user)
 
     return render(request, 'yuzzaz/partials/edit_profile_modal.html', {'form': form, 'viewing_user': request.user})
-    
-    
+
+
 
 def custom_404_view(request, exception):
     return render(request, 'partials/404.html', status=404)
