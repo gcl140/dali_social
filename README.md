@@ -1,163 +1,129 @@
 # 🌐 DALI Social
 
-A full-stack social media platform built for the DALI Lab community at Dartmouth College. Connect with fellow lab members, share updates, and discover the amazing personalities that make up our innovative team.
+A full-stack social platform built for the DALI Lab community at Dartmouth College. Connect with fellow lab members, share updates, and discover the amazing people behind the projects.
 
 ![DALI Social Banner](static/images/fav.png)
 
-## ✨ Features
+## ✨ What You Can Do
 
-### 👥 Member Profiles
-- Browse all DALI Lab members with rich profile information
-- Filter members by role (Developer, Designer, PM, Core Team, Mentor)
+### 👥 Discover People
+- Browse all DALI Lab members with rich profiles
+- Filter by role (Developer, Designer, PM, Core Team, Mentor)
 - Search by name, major, minor, or hometown
-- View detailed profiles with favorite things, quotes, and fun facts
+- Learn about members' favorite things, quotes, and fun facts
 
-### 📝 Posts & Feed
-- Create and share posts with text, images, or links
-- Like and comment on posts from fellow members
-- Real-time feed of community updates
-- Rich post interactions with engagement metrics
+### 📝 Share & Connect
+- Create posts with text, images, or links
+- Like and comment on community updates
+- See real-time activity in your feed
+- Track engagement on your posts
 
-### 🤝 Connections
+### 🤝 Build Your Network
 - Send and receive connection requests
-- Build your professional network within DALI
-- Track pending requests and accepted connections
-- Discover suggested connections
+- Grow your professional network within DALI
+- Manage pending requests and connections
+- Get suggestions for new connections
 
-### 🔌 REST API
-- Full CRUD operations for members via API
-- Search and filter endpoints for data visualization
-- Pagination and ordering support
-- Designed for frontend integration
+### 🔌 API Access
+- Full CRUD operations for member data
+- Search and filter endpoints
+- Pagination and sorting support
+- Ready for data visualization projects
 
-## 🚀 Live Demo
+## 🚀 See It Live
 
-**Deployed Application:** *Coming soon on Render*
+**Live Application:** *Live on PythonAnywhere: https://maghettoni.pythonanywhere.com/*
 
-## 📸 Screenshots
-
-| Member Directory | Profile View | Feed |
-|:---:|:---:|:---:|
-| ![Members](https://via.placeholder.com/300x200?text=Member+List) | ![Profile](https://via.placeholder.com/300x200?text=Profile+View) | ![Feed](https://via.placeholder.com/300x200?text=Post+Feed) |
-
-| Connections | API Endpoint | Mobile View |
-|:---:|:---:|:---:|
-| ![Connections](https://via.placeholder.com/300x200?text=Connections) | ![API](https://via.placeholder.com/300x200?text=REST+API) | ![Mobile](https://via.placeholder.com/300x200?text=Mobile+View) |
-
-## 🛠️ Tech Stack
+## 🛠️ Built With
 
 ### Backend
-- **Django 4.2** - High-level Python web framework
-- **Django REST Framework** - Powerful API toolkit
-- **SQLite** - Lightweight database (easily swappable to PostgreSQL)
-- **Google OAuth2** - Secure authentication via social-auth-app-django
+- **Django 4.2** - Python web framework
+- **Django REST Framework** - API toolkit
+- **SQLite** - Database (easy switch to PostgreSQL)
+- **Google OAuth2** - Secure login, and email auth
 
 ### Frontend
 - **Django Templates** - Server-side rendering
-- **Tailwind CSS** - Utility-first CSS framework (via CDN)
-- **Font Awesome** - Icon library
-- **DM Sans** - Clean, modern typography
+- **Tailwind CSS** - Styling via CDN
+- **Font Awesome** - Icons
+- **DM Sans** - Clean typography
 
 ### Deployment Ready
-- **WhiteNoise** - Static file serving
-- **Render** - Cloud hosting compatible
-- **Docker** - Containerization ready
+- **WhiteNoise** - Static files
+- **PythonAnywhere** - Cloud hosting
 
-## 📋 Setup Instructions
+## 🚦 Get Started
 
-### Prerequisites
-- Python 3.10+
-- pip (Python package manager)
+### What You'll Need
+- Python 3.9+
+- pip
 - Git
 
-### Local Development
+### Local Setup
 
-1. **Clone the repository**
+1. **Get the code**
    ```bash
    git clone https://github.com/gcl140/dali_social.git
    cd dali_social
    ```
 
-2. **Create a virtual environment**
+2. **Set up your environment**
    ```bash
    python -m venv venv
    
-   # On Windows
+   # Windows
    venv\Scripts\activate
    
-   # On macOS/Linux
+   # Mac/Linux
    source venv/bin/activate
    ```
 
-3. **Install dependencies**
+3. **Install packages**
    ```bash
    pip install -r req.txt
    ```
 
-4. **Set up environment variables** (optional for Google OAuth)
+4. **Set up environment** (optional for Google login)
    ```bash
    export GOOGLE_CLIENT_ID='your-google-client-id'
    export GOOGLE_CLIENT_SECRET='your-google-client-secret'
    export SECRET_KEY='your-secret-key'
    ```
 
-5. **Run database migrations**
+5. **Set up database**
    ```bash
    python manage.py migrate
    ```
 
-6. **Load sample DALI member data** (if available)
+6. **Add sample data** (if available)
    ```bash
-   python manage.py loaddata members/fixtures/members.json
+   python manage.py import_dali_dict members.json
    ```
    
-   Or import from the DALI social media JSON:
-   ```bash
-   python manage.py import_members
-   ```
 
-7. **Create a superuser** (for admin access)
+7. **Create admin account**
    ```bash
    python manage.py createsuperuser
    ```
 
-8. **Run the development server**
+8. **Run the server**
    ```bash
    python manage.py runserver
    ```
 
-9. **Access the application**
+9. **Open your browser**
    - Main app: http://127.0.0.1:8000/
-   - Admin panel: http://127.0.0.1:8000/admin/
-   - API endpoints: http://127.0.0.1:8000/api/
+   - Admin: http://127.0.0.1:8000/admin/
 
-## 🔗 API Documentation
 
-### Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/members/` | List all members (paginated) |
-| `POST` | `/api/members/` | Create a new member |
-| `GET` | `/api/members/{id}/` | Retrieve a specific member |
-| `PUT` | `/api/members/{id}/` | Update a member |
-| `DELETE` | `/api/members/{id}/` | Delete a member |
-
-### Query Parameters
-- `?search=` - Search by name, major, minor, or hometown
-- `?ordering=name` - Order by field (name, year, created_at)
+### Search & Filter
+- `?search=` - Search names, majors, minors, hometowns
+- `?ordering=name` - Sort by field
 - `?page=` - Pagination
 
-### Example Request
-```bash
-# Get all developers
-curl http://127.0.0.1:8000/api/members/?search=developer
 
-# Get member details
-curl http://127.0.0.1:8000/api/members/1/
-```
 
-### Example Response
+### Sample Response
 ```json
 {
     "id": 1,
@@ -175,57 +141,55 @@ curl http://127.0.0.1:8000/api/members/1/
 
 ---
 
-## 📖 Learning Journey
+## 💡 The Story Behind This Project
 
-### What inspired this project?
-The DALI Lab is more than just a workspace—it's a community of passionate innovators, designers, and developers. Walking into the lab, you're immediately struck by the diverse backgrounds and talents of its members. This platform was born from a desire to capture that energy digitally, making it easy for members to discover each other's stories, interests, and what makes each person unique beyond their technical skills.
+### Why Build This?
+The DALI Lab isn't just a workspace—it's a community of passionate creators. Every time I walk into the lab, I'm struck by the incredible diversity of backgrounds and talents. People come from different majors, hometowns, and interests, yet they all share this drive to build amazing things.
 
-The inspiration came from seeing how social connections at DALI often happen organically through shared projects or chance encounters. A digital space could amplify these connections, helping newer members discover potential collaborators and friends based on shared interests, hometowns, or favorite Dartmouth traditions.
+I wanted to capture that energy digitally. While we work together on projects, it's often hard to learn about each other beyond our technical roles. What are people's favorite books? Where did they grow up? What inspires them? This platform helps answer those questions and makes it easier for members to connect on a personal level.
 
-### Potential Impact
-- **For new members**: Quickly discover mentors and peers with similar interests
-- **For project teams**: Find collaborators with complementary skills
-- **For the broader community**: Document and celebrate the diverse backgrounds that make DALI special
-- **For alumni**: Stay connected with the lab community beyond graduation
+### What I Hope It Achieves
+- **For new members**: Quickly find mentors and peers who share your interests
+- **For project teams**: Discover collaborators with complementary skills
+- **For the community**: Celebrate the diverse backgrounds that make DALI special
+- **For alumni**: Stay connected with the lab beyond graduation
 
-### New Technologies Learned
+### Technologies I Learned
 
-**Django REST Framework (DRF)**: Chose DRF for building the API because it provides powerful serialization, viewsets that reduce boilerplate code, and built-in support for pagination and filtering. The learning curve was worth it—DRF's browsable API made development and debugging significantly easier.
+**Django REST Framework**: I chose DRF for the API because it handles serialization beautifully and reduces repetitive code. The learning curve was steep at first, but the browsable API feature made debugging so much easier once I got the hang of it.
 
-**Tailwind CSS**: Coming from traditional CSS, Tailwind's utility-first approach initially felt verbose. However, the rapid prototyping capabilities proved invaluable. Being able to style components directly in templates without context-switching to separate stylesheets accelerated the UI development significantly.
+**Tailwind CSS**: Coming from traditional CSS, Tailwind's utility classes felt strange initially. But once I started building, I loved how quickly I could prototype interfaces without constantly switching between files.
 
-**Social Authentication (OAuth2)**: Implementing Google OAuth through `social-auth-app-django` taught me about authentication flows, token management, and the importance of secure session handling. The pipeline architecture for customizing user creation was particularly enlightening.
+**OAuth2 Authentication**: Implementing Google login taught me about authentication flows and secure session management. The pipeline system for customizing user creation was particularly interesting to work with.
 
 ---
 
-## 🔧 Technical Rationale
+## 🔧 Technical Choices
 
-### Architecture Decisions
+### Why Django?
+Django's "batteries included" approach was perfect for this project. The built-in admin interface alone saved me countless hours. Having separate apps for members, posts, and connections kept everything organized and made the codebase easy to navigate.
 
-**Why Django over other frameworks?**
-Django's "batteries included" philosophy was ideal for this project. The built-in admin interface, ORM, and authentication system allowed rapid development. For a community platform where content management is crucial, Django's admin alone saved significant development time. The project structure with separate apps (members, posts, connections) follows Django conventions and keeps concerns nicely separated.
+### Hybrid Approach
+I went with server-side rendering for the main UI but added a REST API for data access. This gives us fast initial page loads while still allowing for future mobile apps or different frontends to use the same backend.
 
-**Why server-side rendering with API support?**
-The hybrid approach—Django templates for the main UI with a REST API for data access—provides the best of both worlds. Server-side rendering offers excellent SEO and initial load performance, while the API enables future mobile apps or frontend frameworks to consume the same data.
+### Member vs User Models
+I kept Member profiles separate from authentication users. This means we can import all the existing DALI member data without worrying about login systems. When someone signs up, we just link them to their existing profile.
 
-**Database model design**
-The Member model is intentionally separate from the CustomUser model. This allows DALI member data (imported from the JSON dataset) to exist independently of authentication users. When a user signs up, they can be linked to their existing Member profile. This separation also makes the API cleaner for data visualization projects that don't need authentication logic.
+### Tradeoffs Made
 
-### Key Technical Tradeoffs
+1. **SQLite for Now**: Using SQLite for development simplicity, but the code is ready to switch to PostgreSQL for production.
 
-1. **SQLite vs PostgreSQL**: Chose SQLite for development simplicity and easy local setup. The codebase is designed for easy migration to PostgreSQL for production (just change DATABASES settings).
+2. **Tailwind via CDN**: Faster development setup, though a proper build process would be better for production CSS size.
 
-2. **Tailwind CDN vs Build Process**: Used the CDN for rapid development, accepting slightly larger page loads in exchange for simpler setup. For production, a proper Tailwind build would reduce the CSS payload.
+3. **Session Authentication**: Chose session-based auth for browser compatibility. Could add token auth later for mobile apps.
 
-3. **Session-based vs Token Authentication**: Chose session-based auth with OAuth for simplicity and browser compatibility. Token auth could be added for mobile API access without changing the core architecture.
+### The Trickiest Bug
 
-### The Most Difficult Bug
+**The Problem**: After getting Google OAuth working, users could log in but the system couldn't find their Member profiles. The error happened deep in the views when trying to access user details.
 
-**The Problem**: After implementing Google OAuth, users could log in but the system couldn't find their associated Member profile. The error occurred deep in the views when trying to access `request.user.name`.
+**What Was Happening**: The issue was that the CustomUser model had a `name` field, but Member profiles were separate. When people signed up via Google, their user account was created but no corresponding Member profile existed.
 
-**The Investigation**: The issue stemmed from the CustomUser model having a `name` field, but Member profiles being keyed on the `name` string. When users signed up via Google OAuth, their `name` field was populated from their Google profile, but no corresponding Member object existed.
-
-**The Solution**: Implemented an auto-linking mechanism in the view layer:
+**The Fix**: I added automatic profile linking:
 ```python
 member, created = Member.objects.get_or_create(
     name=request.user.name,
@@ -233,20 +197,20 @@ member, created = Member.objects.get_or_create(
 )
 ```
 
-This elegantly handles both cases—existing members with matching names get linked, and new users get a fresh Member profile created. The debugging process taught me about Django's authentication middleware and the importance of consistent data modeling across related models.
+Now when users sign in, the system either finds their existing Member profile or creates a new one. Debugging this taught me a lot about how Django's authentication system works and the importance of keeping related data models in sync.
 
 ---
 
-## 🤖 AI Usage
+## 🤖 Working with AI
 
-Yes, AI tools were used as collaborative partners during development.
+Yes, I used AI tools as coding partners during development. They were great for getting started quickly, but always required human judgment to get right.
 
-### Example Prompt & Adaptation
+### Example Collaboration
 
-**Prompt used:**
-> "Create a Django view that allows users to update their member profile with form validation"
+**What I asked:**
+> "Create a Django view for updating member profiles with form validation"
 
-**AI's initial output:**
+**What AI suggested:**
 ```python
 def profile_update(request, member_id):
     member = get_object_or_404(Member, id=member_id)
@@ -257,86 +221,58 @@ def profile_update(request, member_id):
     return render(request, 'members/profile_update.html', {'form': form})
 ```
 
-**What I had to adapt:**
+**What I had to add:**
 
-1. **Missing authentication**: Added `@login_required` decorator since profile editing should require authentication.
+1. **Authentication**: Added `@login_required` since you should only edit your own profile
 
-2. **No current user handling**: The AI assumed `member_id` would always be provided. I needed to handle the case where users edit their own profile without an ID in the URL:
-   ```python
-   if member_id:
-       member = get_object_or_404(Member, id=member_id)
-   else:
-       member, created = Member.objects.get_or_create(
-           name=request.user.name,
-           defaults={"year": "2024"}
-       )
-   ```
+2. **User handling**: The AI assumed we'd always have a member_id, but I needed to handle cases where users edit their own profiles without an ID
 
-3. **Missing user feedback**: Added Django messages for success/error feedback that the AI didn't include.
+3. **User experience**: Added success/error messages that the AI didn't include
 
-4. **Template context**: Added `is_editing: True` flag to help the template differentiate between view and edit modes.
+4. **Template logic**: Added flags to help templates know when we're in edit mode vs view mode
 
-This example illustrates how AI tools accelerate development by providing solid starting points, but real-world requirements—authentication, edge cases, UX considerations—require human judgment and project-specific knowledge to implement correctly.
+This pattern repeated throughout the project—AI gave me solid starting points, but real-world considerations like security, edge cases, and user experience needed human thinking.
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Layout
 
 ```
 dali_social/
-├── dali_social/          # Django project settings
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── members/              # Member profiles app
-│   ├── models.py
-│   ├── views.py
-│   ├── serializers.py
-│   └── templates/
-├── posts/                # Posts and feed app
-│   ├── models.py
-│   ├── views.py
-│   └── templates/
-├── connections/          # Connection requests app
-│   ├── models.py
-│   ├── views.py
-│   └── templates/
-├── yuzzaz/               # Custom user authentication
-│   ├── models.py
-│   └── views.py
+├── dali_social/          # Project settings
+├── members/              # Member profiles
+├── posts/                # Posts and feed
+├── connections/          # Connection system
+├── yuzzaz/               # User authentication
 ├── templates/            # Base templates
-│   └── base.html
-├── static/               # Static assets
-│   ├── css/
-│   ├── js/
-│   └── images/
+├── static/               # CSS, JS, images
 ├── manage.py
-├── req.txt               # Python dependencies
+├── req.txt              # Dependencies
 └── README.md
 ```
 
-## 🤝 Contributing
+## 🤝 Want to Contribute?
 
-Contributions are welcome! Feel free to:
+I'd love your help! Here's how:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/cool-improvement`)
+3. Commit your changes (`git commit -m 'Add cool improvement'`)
+4. Push to the branch (`git push origin feature/cool-improvement`)
 5. Open a Pull Request
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+MIT License - feel free to use this code for your own projects!
 
-## 🙏 Acknowledgments
+## 🙏 Thanks
 
-- **DALI Lab** at Dartmouth College for the inspiration and member data
-- The Django and Django REST Framework communities
-- Tailwind CSS for the beautiful utility-first styling approach
+- **DALI Lab** for the inspiration and community
+- **Django** and **Tailwind** communities for amazing tools
+- Everyone who tested early versions and gave feedback
 
 ---
 
 <p align="center">
-  Built with ❤️ for the DALI Lab community
+  Made with ❤️ for the DALI Lab community
 </p>

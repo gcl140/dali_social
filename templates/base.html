@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'images/fav.png' %}">
     <script>
         tailwind.config = {
             theme: {
@@ -458,5 +460,19 @@
             </div>
         </div>
     </footer>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const fallbackSrc = "/static/images/fav.png"; // adjust if needed
+
+  document.querySelectorAll("img").forEach((img) => {
+    img.addEventListener("error", () => {
+      if (img.dataset.fallbackApplied) return; // prevent infinite loop
+      img.dataset.fallbackApplied = "1";
+      img.src = fallbackSrc;
+    });
+  });
+});
+</script>
+
 </body>
 </html>
