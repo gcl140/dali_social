@@ -49,9 +49,9 @@
                 <div class="flex items-center">
                     <a href="{% url 'member_list' %}" class="flex-shrink-0 flex items-center">
                         <i class="fas fa-code-branch text-white text-2xl mr-2"></i>
-                        <span class="text-white font-bold text-xl">DALI Social</span>
+                        <span class="text-white font-bold hidden md:block text-xl">DALI Social</span>
                     </a>
-                    <div class="hidden md:ml-6 md:flex md:space-x-4">
+                    <div class="md:ml-6 md:flex md:space-x-4">
                         <a href="{% url 'member_list' %}" class="text-white hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
                             <i class="fas fa-user-friends mr-1"></i>Members
                         </a>
@@ -59,11 +59,11 @@
                             <i class="fas fa-newspaper mr-1"></i>Feed
                         </a>
                         <a href="{% url 'connection_list' %}" class="text-white hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
-                            <i class="fas fa-handshake mr-1"></i>Connections
+                            <i class="fas fa-handshake mr-1"></i>Conn
                         </a>
                     </div>
                 </div>
-                <div class="flex items-center">
+                <div class="md:flex items-center hidden">
                     <div class="flex-shrink-0">
                         <form class="flex" method="get" action="{% url 'search_members' %}">
                             <div class="relative rounded-md shadow-sm">
