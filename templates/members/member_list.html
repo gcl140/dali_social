@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Filters Sidebar -->
+        <div class="lg:col-span-1">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Filters</h3>
+                    <form method="get">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <select name="role" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primary focus:border-primary rounded-md">
+                                <option value="">All Roles</option>
+                                <option value="dev" {% if current_role == 'dev' %}selected{% endif %}>Developer</option>
+                                <option value="des" {% if current_role == 'des' %}selected{% endif %}>Designer</option>
+                                <option value="pm" {% if current_role == 'pm' %}selected{% endif %}>Project Manager</option>
+                                <option value="core" {% if current_role == 'core' %}selected{% endif %}>Core Team</option>
+                                <option value="mentor" {% if current_role == 'mentor' %}selected{% endif %}>Mentor</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                            <select name="year" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primary focus:border-primary rounded-md">
+                                <option value="">All Years</option>
+                                <option value="2024" {% if current_year == '2024' %}selected{% endif %}>2024</option>
+                                <option value="2025" {% if current_year == '2025' %}selected{% endif %}>2025</option>
+                                <option value="2026" {% if current_year == '2026' %}selected{% endif %}>2026</option>
+                                <option value="2027" {% if current_year == '2027' %}selected{% endif %}>2027</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Apply Filters
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Grid -->
+        <div class="lg:col-span-3">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">DALI Members</h2>
+                <form method="get" class="flex w-full sm:w-auto">
+                    <input type="text" name="search" class="block w-full sm:w-64 pl-3 pr-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-primary focus:border-primary" placeholder="Search members..." value="{{ search_query }}">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md shadow-sm text-white gold-gradient hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {% for member in members %}
+                <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]">
+                    <img src="{{ member.picture }}" class="w-full h-48 object-cover" alt="{{ member.name }}">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ member.name }}</h3>
+                        <p class="text-sm text-gray-500 mb-3">
+                            {{ member.year }} • {{ member.major }}
+                        </p>
+                        <div class="mb-4">
+                            {% for role in member.get_roles %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white mr-1 mb-1">
+                                    {{ role }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                        <a href="{% url 'member_detail' member.pk %}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                            View Profile
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="lg:col-span-3">
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">No members found matching your criteria.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <!-- Post -->
+    <div class="bg-white overflow-hidden shadow rounded-lg border-l-4 border-primary mb-6">
+        <div class="p-6">
+            <!-- Author Info -->
+            <div class="flex items-center mb-4">
+                <img
+                    src="{{ post.author.picture }}"
+                    class="w-12 h-12 rounded-full object-cover mr-4"
+                    alt="{{ post.author.name }}"
+                />
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-900">{{ post.author.name }}</h4>
+                    <p class="text-xs text-gray-500">{{ post.created_at|timesince }} ago</p>
+                </div>
+            </div>
+
+            <!-- Post Content -->
+            <p class="text-gray-700 mb-4">{{ post.content }}</p>
+
+            <!-- Post Image -->
+            {% if post.image %}
+            <img
+                src="{{ post.image.url }}"
+                class="w-full rounded-lg mb-4"
+                alt="Post image"
+            />
+            {% endif %}
+
+            <!-- Post Link -->
+            {% if post.link %}
+            <div class="mb-4">
+                <a
+                    href="{{ post.link }}"
+                    target="_blank"
+                    class="inline-flex items-center text-primary hover:text-primary/80 transition-colors duration-200"
+                >
+                    <i class="fas fa-link mr-2"></i> 
+                    <span class="truncate max-w-xs">{{ post.link }}</span>
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0">
+                <div class="flex space-x-3">
+                    <a
+                        href="{% url 'like_post' post.pk %}"
+                        class="inline-flex items-center px-3 py-1.5 border border-red-300 text-sm font-medium rounded-full text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+                    >
+                        <i class="fas fa-heart mr-1.5"></i> 
+                        <span>{{ post.like_count }} Likes</span>
+                    </a>
+                    <span class="inline-flex items-center px-3 py-1.5 border border-primary text-sm font-medium rounded-full text-primary bg-white">
+                        <i class="fas fa-comment mr-1.5"></i> 
+                        <span>{{ comments.count }} Comments</span>
+                    </span>
+                </div>
+                <a
+                    href="{% url 'post_list' %}"
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
+                >
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Feed
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-6 py-5 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Comments</h3>
+        </div>
+        <div class="p-6">
+            <!-- Comment Form -->
+            <form method="post" class="mb-6">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <textarea 
+                        name="{{ form.content.name }}"
+                        class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        rows="3"
+                        placeholder="Add a comment..."
+                    >{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
+                    {% if form.content.errors %}
+                    <div class="text-red-600 text-sm mt-1">{{ form.content.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                    Post Comment
+                </button>
+            </form>
+
+            <!-- Comments List -->
+            {% if comments %} 
+                <div class="space-y-4">
+                    {% for comment in comments %}
+                    <div class="border-b border-gray-200 pb-4 last:border-b-0">
+                        <div class="flex items-center mb-2">
+                            <img
+                                src="{{ comment.author.picture }}"
+                                class="w-8 h-8 rounded-full object-cover mr-3"
+                                alt="{{ comment.author.name }}"
+                            />
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900">{{ comment.author.name }}</h4>
+                                <p class="text-xs text-gray-500">{{ comment.created_at|timesince }} ago</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm">{{ comment.content }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Empty Comments State -->
+                <div class="text-center py-8">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-100 mb-4">
+                        <i class="fas fa-comment text-gray-400"></i>
+                    </div>
+                    <p class="text-gray-500">No comments yet. Be the first to comment!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

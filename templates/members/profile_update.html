@@ -1,0 +1,289 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-6 py-5 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+                Edit Profile - {{ member.name }}
+            </h2>
+        </div>
+        
+        <div class="p-6">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Basic Information -->
+                    <div class="md:col-span-2">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
+                    </div>
+                    
+                    <!-- Name -->
+                    <div>
+                        <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Full Name *
+                        </label>
+                        {{user.full_name }}
+                        <input 
+                            type="text" 
+                            name="{{ form.name.name }}"
+                            id="{{ form.name.id_for_label }}"
+                            value="{{ user.name }}"
+                            readonly
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                            required
+                        >
+                        {% if form.name.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Year -->
+                    <div>
+                        <label for="{{ form.year.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Year *
+                        </label>
+                        <select 
+                            name="{{ form.year.name }}"
+                            id="{{ form.year.id_for_label }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                            required
+                        >
+                            {% for value, label in form.fields.year.choices %}
+                                <option value="{{ value }}" {% if form.year.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.year.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.year.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Roles -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Your Roles
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {% for value, label in form.fields.roles.choices %}
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    name="roles" 
+                                    value="{{ value }}" 
+                                    id="role_{{ value }}"
+                                    class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+                                    {% if value in form.roles.value %}checked{% endif %}
+                                >
+                                <label for="role_{{ value }}" class="ml-2 text-sm text-gray-700">
+                                    {{ label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.roles.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.roles.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Academic Information -->
+                    <div class="md:col-span-2 mt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Academic Information</h3>
+                    </div>
+
+                    <!-- Major -->
+                    <div>
+                        <label for="{{ form.major.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Major
+                        </label>
+                        <input 
+                            type="text" 
+                            name="{{ form.major.name }}"
+                            id="{{ form.major.id_for_label }}"
+                            value="{{ form.major.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                        {% if form.major.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.major.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Minor -->
+                    <div>
+                        <label for="{{ form.minor.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Minor
+                        </label>
+                        <input 
+                            type="text" 
+                            name="{{ form.minor.name }}"
+                            id="{{ form.minor.id_for_label }}"
+                            value="{{ form.minor.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                        {% if form.minor.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.minor.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Personal Information -->
+                    <div class="md:col-span-2 mt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Personal Information</h3>
+                    </div>
+
+                    <!-- Hometown -->
+                    <div>
+                        <label for="{{ form.home.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Hometown
+                        </label>
+                        <input 
+                            type="text" 
+                            name="{{ form.home.name }}"
+                            id="{{ form.home.id_for_label }}"
+                            value="{{ form.home.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                        {% if form.home.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.home.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Birthday -->
+                    <div>
+                        <label for="{{ form.birthday.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Birthday (MM/DD)
+                        </label>
+                        <input 
+                            type="text" 
+                            name="{{ form.birthday.name }}"
+                            id="{{ form.birthday.id_for_label }}"
+                            value="{{ form.birthday.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                            placeholder="MM/DD"
+                        >
+                        {% if form.birthday.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.birthday.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Profile Picture -->
+                    <div class="md:col-span-2">
+                        <label for="{{ form.picture.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Profile Picture URL
+                        </label>
+                        <input 
+                            type="url" 
+                            name="{{ form.picture.name }}"
+                            id="{{ form.picture.id_for_label }}"
+                            value="{{ form.picture.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                            placeholder="https://example.com/your-photo.jpg"
+                        >
+                        {% if form.picture.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.picture.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Favorite Things -->
+                    <div class="md:col-span-2 mt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Favorite Things</h3>
+                    </div>
+
+                    <!-- Favorite Thing 1 -->
+                    <div class="md:col-span-2">
+                        <label for="id_favorite_thing_1" class="block text-sm font-medium text-gray-700 mb-2">
+                            Favorite Thing 1
+                        </label>
+                        <input 
+                            type="text" 
+                            name="favorite_thing_1"
+                            id="id_favorite_thing_1"
+                            value="{{ form.favorite_thing_1.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                    </div>
+
+                    <!-- Favorite Thing 2 -->
+                    <div class="md:col-span-2">
+                        <label for="id_favorite_thing_2" class="block text-sm font-medium text-gray-700 mb-2">
+                            Favorite Thing 2
+                        </label>
+                        <input 
+                            type="text" 
+                            name="favorite_thing_2"
+                            id="id_favorite_thing_2"
+                            value="{{ form.favorite_thing_2.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                    </div>
+
+                    <!-- Favorite Thing 3 -->
+                    <div class="md:col-span-2">
+                        <label for="id_favorite_thing_3" class="block text-sm font-medium text-gray-700 mb-2">
+                            Favorite Thing 3
+                        </label>
+                        <input 
+                            type="text" 
+                            name="favorite_thing_3"
+                            id="id_favorite_thing_3"
+                            value="{{ form.favorite_thing_3.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                    </div>
+
+                    <!-- Dartmouth Tradition -->
+                    <div class="md:col-span-2">
+                        <label for="{{ form.favorite_dartmouth_tradition.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Favorite Dartmouth Tradition
+                        </label>
+                        <input 
+                            type="text" 
+                            name="{{ form.favorite_dartmouth_tradition.name }}"
+                            id="{{ form.favorite_dartmouth_tradition.id_for_label }}"
+                            value="{{ form.favorite_dartmouth_tradition.value|default:'' }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                        >
+                    </div>
+
+                    <!-- Quote -->
+                    <div class="md:col-span-2">
+                        <label for="{{ form.quote.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Favorite Quote
+                        </label>
+                        <textarea 
+                            name="{{ form.quote.name }}"
+                            id="{{ form.quote.id_for_label }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                            rows="3"
+                        >{{ form.quote.value|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Fun Fact -->
+                    <div class="md:col-span-2">
+                        <label for="{{ form.fun_fact.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Fun Fact
+                        </label>
+                        <textarea 
+                            name="{{ form.fun_fact.name }}"
+                            id="{{ form.fun_fact.id_for_label }}"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                            rows="3"
+                        >{{ form.fun_fact.value|default:'' }}</textarea>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 mt-8 pt-6 border-t border-gray-200">
+                    <button type="submit" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                        Update Profile
+                    </button>
+                    <a href="{% url 'member_detail' member.pk %}" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

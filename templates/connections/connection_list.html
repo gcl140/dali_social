@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Main Content -->
+        <div class="lg:col-span-3">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                <div class="flex items-center">
+                    <i class="fas fa-handshake text-primary text-2xl mr-3"></i>
+                    <h2 class="text-2xl font-bold text-gray-900">My Connections</h2>
+                </div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary text-white mt-4 sm:mt-0">
+                    {{ connections.count }} connections
+                </span>
+            </div>
+            
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+    {% for connection in connections %}
+        {% if connection.from_member == current_member %}
+        <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]">
+            <img src="{{ connection.from_member.picture }}" 
+                 class="w-full h-48 object-cover" 
+                 alt="{{ connection.from_member.name }}">
+
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ connection.from_member.name }}</h3>
+
+                <p class="text-sm text-gray-500 mb-2">
+                    {{ connection.from_member.year }} • {{ connection.from_member.major }}
+                </p>
+
+                <div class="mb-4">
+                    {% for role in connection.from_member.get_roles %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white mr-1 mb-1">
+                            {{ role }}
+                        </span>
+                    {% endfor %}
+                </div>
+
+                <a href="{% url 'member_detail' connection.from_member.pk %}" 
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                    View Profile
+                </a>
+                {% if connection.status == 'pending' %}
+
+                <a href="{% url 'accept_connection_request' connection.from_member.pk %}" 
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                    Accept
+                </a>
+
+                <a href="{% url 'reject_connection_request' connection.from_member.pk %}" 
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                    Deny
+                </a>
+
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]">
+            <img src="{{ connection.to_member.picture }}" 
+                 class="w-full h-48 object-cover" 
+                 alt="{{ connection.to_member.name }}">
+
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ connection.to_member.name }}</h3>
+
+                <p class="text-sm text-gray-500 mb-2">
+                    {{ connection.to_member.year }} • {{ connection.to_member.major }}
+                </p>
+
+                <div class="mb-4">
+                    {% for role in connection.to_member.get_roles %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white mr-1 mb-1">
+                            {{ role }}
+                        </span>
+                    {% endfor %}
+                </div>
+
+                <a href="{% url 'member_detail' connection.pk %}" 
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                    View Profile
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="bg-white overflow-hidden shadow rounded-lg w-full">
+    <div class="px-6 py-12 text-center">
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-100 mb-4">
+            <i class="fas fa-users text-gray-400 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No connections yet</h3>
+        <p class="text-gray-500 mb-6">Start connecting with other DALI members to build your network!</p>
+        <a href="{% url 'member_list' %}" 
+           class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+            Browse Members
+        </a>
+    </div>
+</div>
+    
+{% endfor %}
+</div>
+
+
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Pending Requests -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Pending Requests</h3>
+                        {% if pending_requests %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            {{ pending_requests.count }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if pending_requests %}
+                        <div class="space-y-4">
+                            {% for request in pending_requests %}
+                            <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div class="flex items-center">
+                                    <img src="{{ request.from_member.picture }}" 
+                                         class="w-10 h-10 rounded-full object-cover mr-3" 
+                                         alt="{{ request.from_member.name }}">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">{{ request.from_member.name }}</h4>
+                                        <p class="text-xs text-gray-500">{{ request.from_member.major }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1">
+                                    <a href="{% url 'accept_connection_request' request.pk %}" class="inline-flex items-center p-1.5 border border-transparent rounded-full shadow-sm text-white bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                        <i class="fas fa-check w-3 h-3"></i>
+                                    </a>
+                                    <a href="{% url 'reject_connection_request' request.pk %}" class="inline-flex items-center p-1.5 border border-gray-300 rounded-full shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                        <i class="fas fa-times w-3 h-3"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500 text-center py-4">No pending connection requests.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <a href="{% url 'member_list' %}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                            <i class="fas fa-search mr-2"></i>Find Members
+                        </a>
+                        <a href="{% url 'post_list' %}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                            <i class="fas fa-newspaper mr-2"></i>View Feed
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
