@@ -1,45 +1,82 @@
 
 
+import random as _random
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import MemberProfileForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
+from django.core.paginator import Paginator
 from rest_framework import viewsets, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Member
 from .serializers import MemberSerializer
 
+MEMBERS_PER_PAGE = 12
+
+
+def _querystring_without_page(request):
+    params = request.GET.copy()
+    params.pop('page', None)
+    return params.urlencode()
+
+
 @login_required
 def member_list(request):
-    members = Member.objects.all()
-    
+    members_qs = Member.objects.all()
+
     # Filtering
     role = request.GET.get('role')
     year = request.GET.get('year')
     search = request.GET.get('search')
-    
+
     if role:
-        if role == 'dev': members = members.filter(dev=True)
-        elif role == 'des': members = members.filter(des=True)
-        elif role == 'pm': members = members.filter(pm=True)
-        elif role == 'core': members = members.filter(core=True)
-        elif role == 'mentor': members = members.filter(mentor=True)
-    
+        if role == 'dev': members_qs = members_qs.filter(dev=True)
+        elif role == 'des': members_qs = members_qs.filter(des=True)
+        elif role == 'pm': members_qs = members_qs.filter(pm=True)
+        elif role == 'core': members_qs = members_qs.filter(core=True)
+        elif role == 'mentor': members_qs = members_qs.filter(mentor=True)
+
     if year:
-        members = members.filter(year=year)
-    
+        members_qs = members_qs.filter(year=year)
+
     if search:
-        members = members.filter(
+        members_qs = members_qs.filter(
             Q(name__icontains=search) |
             Q(major__icontains=search) |
             Q(minor__icontains=search) |
             Q(home__icontains=search)
         )
-    
+
+    # Stable random order: shuffle filtered ids with a URL seed so pagination
+    # stays consistent across page clicks. New seed each fresh visit.
+    seed = request.GET.get('seed') or str(_random.randint(0, 2**31 - 1))
+    shuffled_ids = list(members_qs.order_by('pk').values_list('pk', flat=True))
+    _random.Random(seed).shuffle(shuffled_ids)
+
+    paginator = Paginator(shuffled_ids, MEMBERS_PER_PAGE)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    page_ids = list(page_obj.object_list)
+    by_pk = Member.objects.in_bulk(page_ids)
+    members = [by_pk[pk] for pk in page_ids if pk in by_pk]
+
+    # Carry the seed in pagination/filter links so reshuffles don't happen mid-session.
+    qs_params = request.GET.copy()
+    qs_params.pop('page', None)
+    qs_params['seed'] = seed
+    querystring = qs_params.urlencode()
+
     context = {
         'members': members,
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'is_paginated': page_obj.has_other_pages(),
+        'page_range': paginator.get_elided_page_range(page_obj.number, on_each_side=1, on_ends=1),
+        'querystring': querystring,
+        'seed': seed,
         'current_role': role,
         'current_year': year,
         'search_query': search,
@@ -62,12 +99,20 @@ def search_members(request):
             Q(minor__icontains=query) |
             Q(home__icontains=query) |
             Q(favorite_dartmouth_tradition__icontains=query)
-        )
+        ).order_by('name')
     else:
-        members = Member.objects.all()
-    
+        members = Member.objects.all().order_by('name')
+
+    paginator = Paginator(members, MEMBERS_PER_PAGE)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     context = {
-        'members': members,
+        'members': page_obj,
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'is_paginated': page_obj.has_other_pages(),
+        'page_range': paginator.get_elided_page_range(page_obj.number, on_each_side=1, on_ends=1),
+        'querystring': _querystring_without_page(request),
         'query': query,
     }
     return render(request, 'members/search_results.html', context)

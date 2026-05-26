@@ -26,6 +26,7 @@ def connection_list(request):
     }
     return render(request, 'connections/connection_list.html', context)
 
+@login_required
 def send_connection_request(request, pk):
     to_member = get_object_or_404(Member, pk=pk)
     # In a real app, you'd get the logged-in member
@@ -50,6 +51,7 @@ def send_connection_request(request, pk):
     
     return redirect('member_detail', pk=to_member.pk)
 
+@login_required
 def accept_connection_request(request, pk):
     connection = get_object_or_404(Connection, pk=pk)
     connection.status = 'accepted'
@@ -57,6 +59,7 @@ def accept_connection_request(request, pk):
     messages.success(request, f"You are now connected with {connection.from_member.name}!")
     return redirect('connection_list')
 
+@login_required
 def reject_connection_request(request, pk):
     connection = get_object_or_404(Connection, pk=pk)
     connection.status = 'rejected'

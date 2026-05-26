@@ -1,12 +1,31 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.utils import timezone
 from .models import Post, Like, Comment
 from members.models import Member
 from .forms import PostForm, CommentForm
 
 def post_list(request):
     posts = Post.objects.all()
-    context = {'posts': posts}
+
+    today = timezone.localdate()
+    active_member_ids = set()
+    active_member_ids.update(
+        Post.objects.filter(created_at__date=today).values_list('author_id', flat=True)
+    )
+    active_member_ids.update(
+        Comment.objects.filter(created_at__date=today).values_list('author_id', flat=True)
+    )
+    active_member_ids.update(
+        Like.objects.filter(created_at__date=today).values_list('member_id', flat=True)
+    )
+
+    context = {
+        'posts': posts,
+        'members_count': Member.objects.count(),
+        'posts_count': Post.objects.count(),
+        'active_today': len(active_member_ids),
+    }
     return render(request, 'posts/post_list.html', context)
 
 def post_detail(request, pk):

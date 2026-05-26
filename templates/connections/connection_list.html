@@ -20,38 +20,71 @@
 
     {% for connection in connections %}
         {% if connection.from_member == current_member %}
+        {% with other=connection.to_member %}
         <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]">
-            <img src="{{ connection.from_member.picture }}" 
-                 class="w-full h-48 object-cover" 
-                 alt="{{ connection.from_member.name }}">
+            <img src="{{ other.picture }}"
+                 class="w-full h-48 object-cover"
+                 alt="{{ other.name }}">
 
             <div class="p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ connection.from_member.name }}</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ other.name }}</h3>
 
                 <p class="text-sm text-gray-500 mb-2">
-                    {{ connection.from_member.year }} • {{ connection.from_member.major }}
+                    {{ other.year }} • {{ other.major }}
                 </p>
 
                 <div class="mb-4">
-                    {% for role in connection.from_member.get_roles %}
+                    {% for role in other.get_roles %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white mr-1 mb-1">
+                            {{ role }}
+                        </span>
+                    {% endfor %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if connection.status == 'accepted' %}bg-green-100 text-green-800{% elif connection.status == 'pending' %}bg-yellow-100 text-yellow-800{% else %}bg-gray-100 text-gray-800{% endif %} mr-1 mb-1">
+                        {{ connection.get_status_display }}
+                    </span>
+                </div>
+
+                <a href="{% url 'member_detail' other.pk %}"
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                    View Profile
+                </a>
+            </div>
+        </div>
+        {% endwith %}
+        {% else %}
+        {% with other=connection.from_member %}
+        <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]">
+            <img src="{{ other.picture }}"
+                 class="w-full h-48 object-cover"
+                 alt="{{ other.name }}">
+
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ other.name }}</h3>
+
+                <p class="text-sm text-gray-500 mb-2">
+                    {{ other.year }} • {{ other.major }}
+                </p>
+
+                <div class="mb-4">
+                    {% for role in other.get_roles %}
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white mr-1 mb-1">
                             {{ role }}
                         </span>
                     {% endfor %}
                 </div>
 
-                <a href="{% url 'member_detail' connection.from_member.pk %}" 
+                <a href="{% url 'member_detail' other.pk %}"
                    class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
                     View Profile
                 </a>
                 {% if connection.status == 'pending' %}
 
-                <a href="{% url 'accept_connection_request' connection.from_member.pk %}" 
+                <a href="{% url 'accept_connection_request' connection.pk %}"
                    class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
                     Accept
                 </a>
 
-                <a href="{% url 'reject_connection_request' connection.from_member.pk %}" 
+                <a href="{% url 'reject_connection_request' connection.pk %}"
                    class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
                     Deny
                 </a>
@@ -59,33 +92,7 @@
                 {% endif %}
             </div>
         </div>
-        {% else %}
-        <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]">
-            <img src="{{ connection.to_member.picture }}" 
-                 class="w-full h-48 object-cover" 
-                 alt="{{ connection.to_member.name }}">
-
-            <div class="p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ connection.to_member.name }}</h3>
-
-                <p class="text-sm text-gray-500 mb-2">
-                    {{ connection.to_member.year }} • {{ connection.to_member.major }}
-                </p>
-
-                <div class="mb-4">
-                    {% for role in connection.to_member.get_roles %}
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white mr-1 mb-1">
-                            {{ role }}
-                        </span>
-                    {% endfor %}
-                </div>
-
-                <a href="{% url 'member_detail' connection.pk %}" 
-                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
-                    View Profile
-                </a>
-            </div>
-        </div>
+        {% endwith %}
         {% endif %}
         {% empty %}
         <div class="bg-white overflow-hidden shadow rounded-lg w-full">
